@@ -109,6 +109,20 @@ function animate() {
     });
     enemies.forEach((enemy) => {
         enemy.update();
+
+        projectiles.forEach((projectile) => {
+            const dis = Math.hypot(
+                projectile.x - enemy.x,
+                projectile.y - enemy.y
+            );
+
+            if (dis - projectile.radius - enemy.radius < 0) {
+                setTimeout(() => {
+                    enemies.splice(enemies.indexOf(enemy), 1);
+                    projectiles.splice(projectiles.indexOf(projectile), 1);
+                }, 0);
+            }
+        });
     });
 }
 
