@@ -107,6 +107,18 @@ function animate() {
     player.draw();
     projectiles.forEach((projectile) => {
         projectile.update();
+
+        // remove projectiles from screen edges
+        if (
+            projectile.x - projectile.radius < 0 ||
+            projectile.x + projectile.radius > canvas.width ||
+            projectile.y - projectile.radius < 0 ||
+            projectile.y + projectile.radius > canvas.height
+        ) {
+            setTimeout(() => {
+                projectiles.splice(projectiles.indexOf(projectile), 1);
+            }, 0);
+        }
     });
     enemies.forEach((enemy) => {
         enemy.update();
@@ -132,6 +144,8 @@ function animate() {
 }
 
 addEventListener("click", (e) => {
+    console.log(projectiles);
+
     const angle = Math.atan2(e.clientY - y, e.clientX - x);
 
     const velocity = {
