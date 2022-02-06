@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-console.log(gsap);
+
 class Player {
     // size, position, color
     constructor(x, y, radius, color) {
@@ -68,11 +68,42 @@ class Enemy {
         this.y = this.y + this.velocity.y;
     }
 }
+class Particle {
+    // size, position, color, speed
+    constructor(x, y, radius, color, velocity) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+        this.velocity = velocity;
+        this.alpha = 1;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.GlobablAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    update() {
+        this.draw();
+        this.x = this.x + this.velocity.x;
+        this.y = this.y + this.velocity.y;
+        this.alpha -= 0.01;
+    }
+}
 
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
 const player = new Player(x, y, 15, "white");
+const projectiles = [];
+const enemies = [];
+const particles = [];
 
 function spawnEnemies() {
     setInterval(() => {
@@ -105,6 +136,13 @@ function animate() {
     ctx.fillStyle = "rgba(0,0,0,.2)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     player.draw();
+    particles.forEach((particle, index) => {
+        if (particle.alpha <= 0) {
+            particles.splice(index, 1);
+        } else {
+            particle.update();
+        }
+    });
     projectiles.forEach((projectile) => {
         projectile.update();
 
@@ -136,6 +174,22 @@ function animate() {
             );
             // projectile collides enemy
             if (dis - projectile.radius - enemy.radius < 0) {
+                // create explosions
+                for (let i = 0; i < enemy.radius * 2; i++) {
+                    particles.push(
+                        new Particle(
+                            projectile.x,
+                            projectile.y,
+                            2,
+                            enemy.color,
+                            {
+                                x: (Math.random() - 0.5) * (Math.random() * 7),
+                                y: (Math.random() - 0.5) * (Math.random() * 7),
+                            }
+                        )
+                    );
+                }
+
                 if (enemy.radius / 2 > 7) {
                     gsap.to(enemy, {
                         radius: enemy.radius / 2,
@@ -165,9 +219,6 @@ addEventListener("click", (e) => {
     };
     projectiles.push(new Projectile(x, y, 4, "white", velocity));
 });
-
-const projectiles = [];
-const enemies = [];
 
 animate();
 spawnEnemies();
