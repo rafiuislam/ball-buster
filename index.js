@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-
+console.log(gsap);
 class Player {
     // size, position, color
     constructor(x, y, radius, color) {
@@ -123,6 +123,8 @@ function animate() {
     enemies.forEach((enemy) => {
         enemy.update();
         const dis = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+
+        // end game
         if (dis - player.radius - enemy.radius < 0) {
             cancelAnimationFrame(animateId);
         }
@@ -132,12 +134,21 @@ function animate() {
                 projectile.x - enemy.x,
                 projectile.y - enemy.y
             );
-
+            // projectile collides enemy
             if (dis - projectile.radius - enemy.radius < 0) {
-                setTimeout(() => {
-                    enemies.splice(enemies.indexOf(enemy), 1);
-                    projectiles.splice(projectiles.indexOf(projectile), 1);
-                }, 0);
+                if (enemy.radius / 2 > 7) {
+                    gsap.to(enemy, {
+                        radius: enemy.radius / 2,
+                    });
+                    setTimeout(() => {
+                        projectiles.splice(projectiles.indexOf(projectile), 1);
+                    }, 0);
+                } else {
+                    setTimeout(() => {
+                        enemies.splice(enemies.indexOf(enemy), 1);
+                        projectiles.splice(projectiles.indexOf(projectile), 1);
+                    }, 0);
+                }
             }
         });
     });
