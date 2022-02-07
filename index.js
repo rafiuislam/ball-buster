@@ -1,5 +1,6 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
+const scoreId = document.querySelector("#score");
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -68,6 +69,8 @@ class Enemy {
         this.y = this.y + this.velocity.y;
     }
 }
+
+const inertia = 0.99;
 class Particle {
     // size, position, color, speed
     constructor(x, y, radius, color, velocity) {
@@ -91,6 +94,8 @@ class Particle {
 
     update() {
         this.draw();
+        this.velocity.x *= inertia;
+        this.velocity.y *= inertia;
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
         this.alpha -= 0.01;
@@ -130,6 +135,7 @@ function spawnEnemies() {
     }, 1000);
 }
 
+let score = 0;
 let animateId;
 function animate() {
     animateId = requestAnimationFrame(animate);
@@ -191,6 +197,9 @@ function animate() {
                 }
 
                 if (enemy.radius / 2 > 7) {
+                    // score increase when enemy is hit
+                    score += 10;
+                    scoreId.innerHTML = score;
                     gsap.to(enemy, {
                         radius: enemy.radius / 2,
                     });
@@ -198,6 +207,9 @@ function animate() {
                         projectiles.splice(projectiles.indexOf(projectile), 1);
                     }, 0);
                 } else {
+                    // score increase when enemy is removed
+                    score += 25;
+                    scoreId.innerHTML = score;
                     setTimeout(() => {
                         enemies.splice(enemies.indexOf(enemy), 1);
                         projectiles.splice(projectiles.indexOf(projectile), 1);
