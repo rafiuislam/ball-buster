@@ -108,10 +108,20 @@ class Particle {
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-const player = new Player(x, y, 15, "white");
-const projectiles = [];
-const enemies = [];
-const particles = [];
+let player = new Player(x, y, 15, "white");
+let projectiles = [];
+let enemies = [];
+let particles = [];
+
+function restart() {
+    player = new Player(x, y, 15, "white");
+    projectiles = [];
+    enemies = [];
+    particles = [];
+    score = 0;
+    totalScore.innerHTML = score;
+    scoreId.innerHTML = score;
+}
 
 function spawnEnemies() {
     setInterval(() => {
@@ -226,8 +236,6 @@ function animate() {
 }
 
 addEventListener("click", (e) => {
-    console.log(projectiles);
-
     const angle = Math.atan2(e.clientY - y, e.clientX - x);
 
     const velocity = {
@@ -238,8 +246,8 @@ addEventListener("click", (e) => {
 });
 
 startBtn.addEventListener("click", (e) => {
+    restart();
     animate();
     spawnEnemies();
-    console.log(scoreBoard);
     scoreBoard.style.display = "none";
 });
