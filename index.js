@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const scoreId = document.querySelector("#score");
 const startBtn = document.querySelector("#startBtn");
 const scoreBoard = document.querySelector("#scoreBoard");
+const totalScore = document.querySelector("#totalScore");
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -173,6 +174,8 @@ function animate() {
         // end game
         if (dis - player.radius - enemy.radius < 0) {
             cancelAnimationFrame(animateId);
+            totalScore.innerText = score;
+            scoreBoard.style.display = "flex";
         }
 
         projectiles.forEach((projectile) => {
