@@ -1,6 +1,8 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const scoreId = document.querySelector("#score");
+const startBtn = document.querySelector("#startBtn");
+const scoreBoard = document.querySelector("#scoreBoard");
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -232,24 +234,9 @@ addEventListener("click", (e) => {
     projectiles.push(new Projectile(x, y, 4, "white", velocity));
 });
 
-animate();
-spawnEnemies();
-
-// addEventListener("keydown", ({ key }) => {
-//     switch (key) {
-//         case "a":
-//             console.log("left");
-//             break;
-//     }
-//     switch (key) {
-//         case "d":
-//             console.log("right");
-//             break;
-//     }
-
-//     switch (key) {
-//         case " ":
-//             console.log("space");
-//             break;
-//     }
-// });
+startBtn.addEventListener("click", (e) => {
+    animate();
+    spawnEnemies();
+    console.log(scoreBoard);
+    scoreBoard.style.display = "none";
+});

@@ -5,10 +5,30 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-<style></style>
+<style>
+    body {
+        margin: 0;
+        background: black;
+    }
+</style>
 
 <div class="fixed text-white text-md ml-4 mt-4 select-none">
     <span>Score: </span> <span id="score">0</span>
+</div>
+
+<div class="fixed inset-0 flex justify-center items-center" id="scoreBoard">
+    <div class="bg-white w-full max-w-md p-6 text-center">
+        <h1 class="text-3xl font-bold leading-none">0</h1>
+        <p class="text-sm text-gray-500 mb-5">Points</p>
+        <div>
+            <button
+                class="bg-blue-500 text-white rounded-full w-full py-2"
+                id="startBtn"
+            >
+                Start Game
+            </button>
+        </div>
+    </div>
 </div>
 <canvas></canvas>
 <script
